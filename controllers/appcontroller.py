@@ -15,7 +15,6 @@ class AppController:
         sambaActiveDirectoryManager = SambaActiveDirectoryManager()        
         @self.app.route('/api/createUser', methods=['POST'])
         @self.auth.api_login_required
-
         def createUser():
             try:
                 args = request.args.to_dict()
