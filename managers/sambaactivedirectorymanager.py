@@ -15,8 +15,7 @@ class SambaActiveDirectoryManager:
     lp = LoadParm()
     creds = Credentials()
     creds.guess(lp)
-    samdb = SamDB(url='/var/lib/samba/private/sam.ldb', session_info=system_session(),credentials=creds, lp=lp)
-    
+    samdb = SamDB(url='/var/lib/samba/private/sam.ldb', session_info=system_session(),credentials=creds, lp=lp)    
     def createUser(self, username : string, password : string):
         try:
             self.samdb.transaction_start()

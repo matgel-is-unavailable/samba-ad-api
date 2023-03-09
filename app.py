@@ -1,8 +1,3 @@
-# VPO  Security report generator
-# Copyright (C) 2022 Tribion B.V
-# Author        MatGel
-# Version       See "version" variable
-
 from flask import Flask
 from controllers.authorizationcontroller import AuthorizationController
 from controllers.appcontroller import AppController
