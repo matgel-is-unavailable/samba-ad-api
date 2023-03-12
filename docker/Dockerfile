@@ -1,23 +1,17 @@
 FROM ubuntu:22.04
 
-RUN apt-get update -y && apt-get install python3 python3-pip -y
-
 # Add samba-latest repository
-RUN apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:linux-schools/samba4.16 && \
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:linux-schools/samba4.17 && \
     apt-get update
 
-RUN apt-get install samba -y
-
-RUN mkdir /samba-ad-api
-WORKDIR /samba-ad-api
-COPY helpers helpers
-COPY managers managers
-COPY controllers controllers
-COPY app.py app.py
-COPY requirements.txt requirements.txt
+# Add samba-latest repository
+RUN apt-get install python3-samba python3-pip  -y
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+COPY app samba-ad-api
 RUN chmod +x app.py
 RUN pip install -r requirements.txt
 
-
-#ENTRYPOINT ["python3","sleep 1000"]
+ENTRYPOINT ["/bin/sh","/entrypoint.sh"]

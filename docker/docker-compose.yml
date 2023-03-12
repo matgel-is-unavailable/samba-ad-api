@@ -1,0 +1,49 @@
+version: '3.5'
+
+services:
+  samba:
+    image: samba-activedirectory:test
+    container_name: samba-dc01
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/cit/54321/adsamba/var/lib/samba:/var/lib/samba
+      - /mnt/cit/54321/adsamba/etc/samba/external:/etc/samba/external
+    environment:
+      - DOMAIN=54321.local
+      - HOSTIP=10.1.0.2
+    networks:
+      activedirectory:
+        ipv4_address: 10.1.0.2
+    dns_search:
+      - 54321.local
+    dns:
+      - 10.1.0.2
+      - 1.1.1.1
+    extra_hosts:
+      - dc01.54321.local:10.1.0.2
+    hostname: dc01
+    privileged: true
+    restart: unless-stopped
+
+  samba-ad-api:
+    image: samba-ad-api:test
+    container_name: samba-ad-api
+    environment:
+      - SAMBAHOST=10.1.0.2
+    ports:
+      - 10000:10000
+    volumes:
+      - /mnt/dev/samba-ad-api/app:/app-dev
+    networks:
+      activedirectory:
+        ipv4_address: 10.1.0.3
+    privileged: true
+    restart: unless-stopped
+
+networks:
+  activedirectory:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/24
+

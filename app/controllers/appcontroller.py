@@ -4,15 +4,14 @@ from helpers.httpresponse import HttpResponse
 from managers.sambaactivedirectorymanager import SambaActiveDirectoryManager
 
 class AppController:
-    
     def __init__(self, app : Flask, auth: AuthorizationController) -> None:
         self.app = app
         self.auth = auth
-        self.init_controller()
+        self.init_controller(self.auth)
         pass
 
-    def init_controller(self):
-        sambaActiveDirectoryManager = SambaActiveDirectoryManager()        
+    def init_controller(self, auth):
+        sambaActiveDirectoryManager = SambaActiveDirectoryManager()     
         @self.app.route('/api/createUser', methods=['POST'])
         @self.auth.api_login_required
         def createUser():
@@ -20,10 +19,8 @@ class AppController:
                 args = request.args.to_dict()
                 username = args.get("username")
                 password = args.get("password")
-                
                 sambaActiveDirectoryManager = SambaActiveDirectoryManager()
                 rdata = sambaActiveDirectoryManager.createUser(username, password)
-
                 resp = jsonify(rdata)   # jsonify provides us with a full response
                 resp.headers.add('Access-Control-Allow-Origin', '*')
 

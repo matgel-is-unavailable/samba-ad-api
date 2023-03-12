@@ -1,0 +1,17 @@
+FROM python:3.12.0a6-alpine3.17
+
+RUN apk add py3-samba
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN mkdir /samba-ad-api
+WORKDIR /samba-ad-api
+COPY helpers helpers
+COPY managers managers
+COPY controllers controllers
+COPY app.py app.py
+COPY requirements.txt requirements.txt
+RUN chmod +x app.py
+RUN pip3 install -r requirements.txt
+
+ENTRYPOINT ["/bin/sh","/entrypoint.sh"]

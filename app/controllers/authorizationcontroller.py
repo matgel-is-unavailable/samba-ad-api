@@ -3,7 +3,7 @@ from flask import request, jsonify
 from functools import wraps
 import logging
 import getpass
-import ldb
+#import ldb
 from samba.auth import system_session
 from samba.credentials import Credentials
 from samba.dcerpc import security
@@ -27,11 +27,11 @@ class AuthorizationController:
             creds.set_username(username)
             creds.set_password(password)
             try:
-                samdb = SamDB(url='ldap://127.0.0.1:389', session_info=system_session(),credentials=creds, lp=lp)
+                samdb = SamDB(url='ldap://10.1.0.2:389', session_info=system_session(),credentials=creds, lp=lp)
             except:
                 print(f"NOT ALLOWED {username} with {password}")
             else:
-                return True 
+                return True
 
     def human_login_required(self, f):
         @wraps(f)
