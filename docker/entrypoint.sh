@@ -1,3 +1,2 @@
 #/bin/bash
-
-sleep 10000
+python3 app.py
