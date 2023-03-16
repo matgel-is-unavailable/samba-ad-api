@@ -13,19 +13,34 @@ class AppController:
 
     def init_controller(self, auth):
         @self.app.route('/api/createUser', methods=['POST'])
-        @self.a.createuser.createUser
-
-        @self.app.route('/api/updatePassword', methods=['POST'])                
         @self.auth.api_login_required
-        def updatePassword():
+        def callCreateUser():
             try:
                 args = request.args.to_dict()
                 username = args.get("username")
                 password = args.get("password")
-                rdata = updatePassword(username, password)
+                samdb = auth.get_auth()
+                rdata = createUser(username, password, samdb)
                 resp = jsonify(rdata)   # jsonify provides us with a full response
                 resp.headers.add('Access-Control-Allow-Origin', '*')
+                return resp
+            except Exception as e: 
+                raise e
+                # 500 error
+                return HttpResponse.getDefault(False)
+            pass
 
+        @self.app.route('/api/updatePassword', methods=['POST'])                
+        @self.auth.api_login_required
+        def callUpdatePassword():
+            try:
+                args = request.args.to_dict()
+                username = args.get("username")
+                password = args.get("password")
+                samdb = auth.get_auth()
+                rdata = updatePassword(username, password, samdb)
+                resp = jsonify(rdata)   # jsonify provides us with a full response
+                resp.headers.add('Access-Control-Allow-Origin', '*')
                 return resp
 
             except Exception as e: 

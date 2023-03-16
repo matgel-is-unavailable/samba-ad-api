@@ -1,7 +1,6 @@
 from flask import Flask
 from controllers.authorizationcontroller import AuthorizationController
 from controllers.appcontroller import AppController
-import api
 
 version = "0.0.1"
 
@@ -12,7 +11,7 @@ class startup:
         
         # Attach controllers
         auth = AuthorizationController()
-        AppController(app, auth, api)
+        AppController(app, auth)
 
         # Run
         app.run(host='0.0.0.0', port=10000, debug=True)
